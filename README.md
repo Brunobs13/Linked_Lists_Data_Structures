@@ -75,6 +75,16 @@ taskList.delete_pos(1);  // Removing Task ID 2
 // Printing the updated task list
 taskList.print();  // Output: Lista= 1 3
 
+ **Input:**
+```txt
+# This line is an example of a comment
+insert 7 9 3 8
+print
+Heap=
+9
+8 3
+7
+
 
 **Conclusion**
 
