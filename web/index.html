@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log Processing & Dynamic Buffer Engine</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="background"></div>
+    <header class="topbar">
+      <h1>Log Processing & Dynamic Buffer Engine</h1>
+      <div id="healthBadge" class="badge">Checking health...</div>
+    </header>
+
+    <main class="layout">
+      <section class="metrics-grid">
+        <article class="card">
+          <h2>Queue Depth</h2>
+          <p id="queueDepth" class="value">-</p>
+        </article>
+        <article class="card">
+          <h2>Processed Logs</h2>
+          <p id="processedCount" class="value">-</p>
+        </article>
+        <article class="card">
+          <h2>Ingested Logs</h2>
+          <p id="ingestedCount" class="value">-</p>
+        </article>
+        <article class="card">
+          <h2>Error Count</h2>
+          <p id="errorCount" class="value">-</p>
+        </article>
+        <article class="card">
+          <h2>Memory Estimate</h2>
+          <p id="memoryEstimate" class="value">-</p>
+        </article>
+        <article class="card">
+          <h2>Last Processing (ms)</h2>
+          <p id="lastProcessing" class="value">-</p>
+        </article>
+      </section>
+
+      <section class="panel-group">
+        <article class="panel">
+          <h2>Manual Log Insertion</h2>
+          <form id="logForm" class="form-grid">
+            <label>
+              Level
+              <select id="levelInput">
+                <option value="INFO">INFO</option>
+                <option value="DEBUG">DEBUG</option>
+                <option value="ERROR">ERROR</option>
+              </select>
+            </label>
+            <label>
+              Source
+              <input id="sourceInput" type="text" value="dashboard" maxlength="63" required />
+            </label>
+            <label class="full-row">
+              Message
+              <textarea id="messageInput" maxlength="511" required></textarea>
+            </label>
+            <button type="submit">Submit Log</button>
+          </form>
+          <p id="formStatus" class="status"></p>
+        </article>
+
+        <article class="panel">
+          <h2>Queue Controls</h2>
+          <div class="actions">
+            <label>
+              Max items to process
+              <input id="maxProcessInput" type="number" min="0" value="0" />
+            </label>
+            <button id="processBtn">Trigger Processing</button>
+          </div>
+          <pre id="processResult" class="result"></pre>
+        </article>
+      </section>
+
+      <section class="panel">
+        <h2>Pending Logs Preview</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Level</th>
+                <th>Source</th>
+                <th>Message</th>
+                <th>Ingested At (ms)</th>
+              </tr>
+            </thead>
+            <tbody id="logsBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
