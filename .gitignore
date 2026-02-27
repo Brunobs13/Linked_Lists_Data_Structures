@@ -1,0 +1,25 @@
+# Build artifacts
+build/
+*.o
+*.so
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data and artifacts
+mlruns/
+artifacts/
+.dvc/cache/

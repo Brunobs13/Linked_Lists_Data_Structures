@@ -1,0 +1,46 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: log-engine-db
+    environment:
+      POSTGRES_DB: ${DB_NAME:-log_engine}
+      POSTGRES_USER: ${DB_USER:-log_engine}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-log_engine}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-log_engine} -d ${DB_NAME:-log_engine}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: log-engine-app
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-log_engine}
+      DB_USER: ${DB_USER:-log_engine}
+      DB_PASSWORD: ${DB_PASSWORD:-log_engine}
+      DB_CONNECT_TIMEOUT: ${DB_CONNECT_TIMEOUT:-5}
+      BUFFER_CAPACITY: ${BUFFER_CAPACITY:-2048}
+      AUTO_PROCESS_THRESHOLD: ${AUTO_PROCESS_THRESHOLD:-256}
+      PROCESS_BATCH_SIZE: ${PROCESS_BATCH_SIZE:-200}
+      PENDING_PREVIEW_LIMIT: ${PENDING_PREVIEW_LIMIT:-200}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      API_PORT: ${API_PORT:-8000}
+      ENGINE_LIB_PATH: /app/build/liblog_engine.so
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+
+volumes:
+  db-data:
